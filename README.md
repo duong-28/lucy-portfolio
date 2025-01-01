@@ -1,3 +1,3 @@
 [Welcome to my portfolio!](https://duong-28.github.io/lucy-portfolio/)
 
-![Demo](photos/Demo.png)
+<img src="photos/demo.png" alt="Demo" width="800"/>
