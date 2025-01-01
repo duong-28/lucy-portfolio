@@ -481,14 +481,12 @@ section {
 }
 
 .collaborate-buttons {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
     display: flex;
     justify-content: center;
-    gap: 4rem;
-    margin-top: -2rem;
+    align-items: center;
+    gap: 0px;
+    margin-top: 2rem;
+    flex-wrap: wrap;
 }
 
 .collaborate-btn {
