@@ -1,5 +1,5 @@
 # [Welcome to my portfolio!](https://duong-28.github.io/lucy-portfolio/)
 
-> 🎬 Director's Note: This portfolio currently prefers the cozy comfort of a laptop viewing (think MacBook, not movie screen 🎥) as my Canva Pro is currently traveling Europe. I'll update it with higher resolution assets and larger display format once she's back in Brissy! 💫
+> Inspired by a library theme with books and lamps, this portfolio reflects my journey as an open book—always evolving and learning. Like the pages of a book, I believe every experience, skill, and project is a chapter that tells my story. 
 
 ![Demo](./photos/image.png)
