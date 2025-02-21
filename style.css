@@ -57,30 +57,37 @@ section {
 /* Header & Navigation */
 .header {
     position: fixed;
-    height: 60px;
     width: 100%;
-    padding: 20px 40px;
-    background: transparent;
+    padding: 8px 40px;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 100;
     gap: 40px;
+    transition: all 0.3s ease;
+}
+
+.header.active {
+    background: rgba(231, 209, 177, 0.25);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 15px rgba(231, 209, 177, 0.08);
+    border-bottom: 1px solid rgba(231, 209, 177, 0.2);
 }
 
 .navbar {
     position: relative;
     display: flex;
-    padding: 4px;
+    align-items: center;
 }
 
 .navbar a {
     font-size: 23px;
-    color: #242038;
-    padding: 8px 24px;
+    padding: 2px 24px;
     transition: var(--transition-speed);
     font-weight: 400;
     position: relative;
+    color: var(--dark-bg);
+    line-height: 1.2;
 }
 
 /* Separator lines */
@@ -91,8 +98,14 @@ section {
     top: 50%;
     transform: translateY(-50%);
     width: 1px;
-    height: 30px;
-    background: rgba(0, 0, 0, 0.2);
+    height: 20px;
+    background: var(--dark-bg);
+    opacity: 0.2;
+}
+
+.header.active .navbar a:not(:last-child)::after {
+    background: var(--dark-bg);
+    opacity: 0.15;
 }
 
 /* Animated underline */
@@ -109,17 +122,21 @@ section {
     transform-origin: right;
 }
 
+.header.active .navbar a::before {
+    background-color: var(--dark-bg);
+}
+
 .navbar a:hover::before {
     transform: scaleX(1);
     transform-origin: left;
 }
 
 .contact {
-    padding: 8px 20px;
+    padding: 4px 20px;
     background-color: var(--dark-bg);
     border-radius: 30px;
     color: var(--primary-color);
-    font-size: 18px;
+    font-size: 20px;
     transition: var(--transition-speed);
     display: inline-flex;
     align-items: center;
@@ -127,11 +144,16 @@ section {
     margin-left: auto;
     position: absolute;
     right: 40px;
-    font-family: 'Chau Philomene One', sans-serif;
+}
+
+.header.active .contact {
+    background-color: var(--dark-bg);
+    color: var(--primary-color);
 }
 
 .contact:hover {
     transform: translateY(-2px);
+    opacity: 0.9;
 }
 
 /* Home Section */
@@ -154,17 +176,27 @@ section {
     margin: 0 auto;
 }
 
-.typing-demo {
+.home-title {
     font-size: 120px;
     font-weight: 200;   
     color: var(--text-color);
-    white-space: nowrap;
-    overflow: hidden;
-    border-right: 3px solid #242038;
-    width: 15ch;
+    text-align: center;
     margin: 0 auto;
     margin-top: 100px;
-    animation: typingHome 3s steps(11) forwards, blink 0.75s step-end infinite;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 3px solid var(--text-color);
+    width: 11ch;
+    animation: typing 3s steps(11), blink 0.75s step-end infinite;
+}
+
+@keyframes typing {
+    from { width: 0 }
+    to { width: 11ch }
+}
+
+@keyframes blink {
+    50% { border-color: transparent }
 }
 
 /* About Section */
@@ -353,28 +385,29 @@ section {
     text-align: center;
 }
 
-.projects-container {
+.carousel-container {
     width: 100%;
     max-width: 1200px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    position: relative;
+    margin: 0 auto;
+}
+
+.projects-container {
+    display: flex;
     gap: 2rem;
-    padding: 0 50px;
-    margin-top: 1rem;
+    transition: transform 0.5s ease;
+    padding: 1rem;
 }
 
 .project-card {
+    min-width: 400px;
     height: 420px;
-    width: 100%;
     position: relative;
     border-radius: 20px;
     overflow: hidden;
-    perspective: 1500px;
     background: #e6dcc6;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.5s ease;
 }
 
 .card-inner {
@@ -382,89 +415,62 @@ section {
     width: 100%;
     height: 100%;
     transform-style: preserve-3d;
-    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.8s;
 }
 
 .project-card:hover .card-inner {
     transform: rotateY(180deg);
 }
 
-.card-front, .card-back {
+.carousel-button {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: 20px;
-}
-
-.card-front {
-    background: #e6dcc6;
-    padding: 1rem;
-}
-
-.card-front video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.card-back {
-    background: rgba(36, 32, 56, 0.95);
-    transform: rotateY(180deg);
-    padding: 2.5rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    font-family: 'Chau Philomene One', sans-serif;
-}
-
-.card-back h3 {
-    font-size: 35px;
-    margin-bottom: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(36, 32, 56, 0.8);
     color: #fff;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
 }
 
-.card-back p {
-    font-size: 13px;
-    line-height: 1.4;
-    color: rgba(255, 255, 255, 0.9);
-    max-width: 85%;
-    margin: 0 auto;
+.carousel-button:hover {
+    background: rgba(36, 32, 56, 1);
 }
 
-.project-links {
-    width: 100%;
-    position: absolute;
-    bottom: 2rem;
-    left: 0;
+.carousel-button.prev {
+    left: -50px;
+}
+
+.carousel-button.next {
+    right: -50px;
+}
+
+.carousel-dots {
     display: flex;
     justify-content: center;
-    gap: 2rem;
+    gap: 8px;
+    margin-top: 20px;
 }
 
-.project-links a {
-    padding: 0.6rem 1.8rem;
-    border-radius: 25px;
-    font-size: 14px;
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(36, 32, 56, 0.3);
+    cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.demo-btn {
-    background: var(--light-bg);
-    color: var(--dark-bg) !important;
-}
-
-.github-btn {
-    border: 1px solid var(--light-bg);
-    color: var(--light-bg) !important;
-}
-
-.project-links a:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+.dot.active {
+    background: rgba(36, 32, 56, 0.9);
+    transform: scale(1.2);
 }
 
 /* Collaborate Section */
@@ -630,7 +636,6 @@ section {
     }
 }
 
-
 /* Media Queries */
 @media (max-width: 1024px) {
     .about-content {
@@ -644,7 +649,7 @@ section {
 }
 
 @media (max-width: 768px) {
-    .typing-demo {
+    .home-title {
         font-size: 80px;
     }
     
@@ -728,21 +733,46 @@ section {
     }
 
     .navbar {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-        background: rgba(98, 112, 139, 0.5);
-        position: absolute;
+        position: fixed;
         top: 60px;
+        left: -100%;
+        width: 100%;
+        height: auto;
+        background: var(--primary-color);
+        transition: 0.3s ease;
+        padding: 1rem 0;
+    }
+
+    .navbar.active {
         left: 0;
     }
 
     .navbar a {
-        margin: 10px 0;
-        width: 100%;
+        display: block;
         text-align: center;
         padding: 15px 0;
-        border-bottom: 1px solid #ccc;
+        width: 100%;
+        color: var(--dark-bg);
+        mix-blend-mode: normal;
+    }
+
+    .navbar a:not(:last-child)::after {
+        display: none;
+    }
+
+    .carousel-container {
+        padding: 0 40px;
+    }
+
+    .project-card {
+        flex: 0 0 300px;
+        height: 380px;
+    }
+
+    .carousel-button {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
     }
 }
 
@@ -774,8 +804,7 @@ section {
         left: -100%;
         width: 100%;
         height: auto;
-        background: rgba(208, 202, 194, 0.9);
-        backdrop-filter: blur(10px);
+        background: var(--primary-color);
         transition: 0.3s ease;
         padding: 1rem 0;
     }
@@ -790,7 +819,7 @@ section {
     }
 
     /* Home Section */
-    .typing-demo {
+    .home-title {
         font-size: 48px;
         width: 100%;
         animation: none;
@@ -879,7 +908,7 @@ section {
 
 /* Small devices */
 @media (max-width: 480px) {
-    .typing-demo {
+    .home-title {
         font-size: 36px;
     }
 
@@ -893,5 +922,20 @@ section {
 
     .skill-cards {
         grid-template-columns: 1fr;
+    }
+
+    .carousel-container {
+        padding: 0 30px;
+    }
+
+    .project-card {
+        flex: 0 0 260px;
+        height: 350px;
+    }
+
+    .carousel-button {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
     }
 }
