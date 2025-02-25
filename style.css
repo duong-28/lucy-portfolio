@@ -1,3 +1,11 @@
+/* Font Declarations */
+@font-face {
+    font-family: 'Handelson-One';
+    src: url('./handelson-1/Handelson-One.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* Variables */
 :root {
     --dark-bg: #242038;
@@ -5,6 +13,9 @@
     --text-color: #242038;
     --primary-color: #E6CDAF;
     --transition-speed: 0.3s;
+    --main-font: 'Chau Philomene One', sans-serif;
+    --title-font: 'Handelson-Three', 'Chau Philomene One', sans-serif;
+    --light-font: 'Handelson-One', 'Chau Philomene One', sans-serif;
 }
 
 /* Base Styles */
@@ -12,7 +23,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Chau Philomene One', sans-serif;
+    font-family: var(--main-font);
     color: var(--text-color);
     text-decoration: none;
     list-style: none;
@@ -161,7 +172,7 @@ section {
 .home {
     width: 100%;
     min-height: 100vh;
-    background: url('./photos/study-bg.jpg') no-repeat center center;
+    background: url('./photos/contact-page.jpg') no-repeat center center;
     background-size: cover;
     display: flex;
     align-items: center;
@@ -171,7 +182,7 @@ section {
 
 .home-content {
     text-align: center;
-    transform: translateY(-160px);
+    transform: translateY(-80px);
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
@@ -189,6 +200,18 @@ section {
     border-right: 3px solid var(--text-color);
     width: 11ch;
     animation: typing 3s steps(11), blink 0.75s step-end infinite;
+    font-family: var(--main-font);
+}
+
+.portfolio-text {
+    font-family: 'Handelson-One', var(--main-font);
+    font-size: 185px;
+    color: var(--text-color);
+    text-align: center;
+    margin-top: -30px;
+    position: relative;
+    z-index: 1;
+    opacity: 1;
 }
 
 @keyframes typing {
@@ -236,6 +259,7 @@ section {
     margin-bottom: 2rem;
     opacity: 1;
     text-align: center;
+    font-family: var(--main-font);
 }
 
 .profile-image {
@@ -358,7 +382,7 @@ section {
 
 /* Projects Section */
 .projects {
-    height: 100vh;
+    min-height: 100vh;
     width: 100%;
     background: url('./photos/projects-page.jpg') no-repeat center center;
     background-size: cover;
@@ -376,6 +400,7 @@ section {
     text-transform: uppercase;
     margin-bottom: 1rem;
     text-align: center;
+    font-family: var(--main-font);
 }
 
 .projects h2 {
@@ -387,28 +412,63 @@ section {
 }
 
 .carousel-container {
+    position: relative;
     width: 100%;
     max-width: 1200px;
-    position: relative;
     margin: 0 auto;
+    padding: 0 80px;
+    height: 450px;
+    display: flex;
+    align-items: center;
+    overflow: visible;
 }
 
-.projects-container {
+.carousel {
+    position: absolute;
+    left: 80px;
+    right: 80px;
     display: flex;
-    gap: 2rem;
-    transition: transform 0.5s ease;
-    padding: 1rem;
+    gap: 40px;
+    transition: transform 0.8s ease;
+    height: 400px;
+    transform: translateX(0);
+    will-change: transform;
 }
 
 .project-card {
-    min-width: 400px;
-    height: 420px;
+    flex: 0 0 320px;
+    height: 100%;
     position: relative;
     border-radius: 20px;
     overflow: hidden;
-    background: #e6dcc6;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: var(--light-bg);
+    box-shadow: 0 10px 30px rgba(36, 32, 56, 0.1);
+    transition: all 0.8s ease;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    will-change: transform, opacity;
+    cursor: pointer;
+    margin-right: 0;
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(36, 32, 56, 0.15);
+}
+
+.project-card::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: var(--primary-color);
+    border-radius: 20px;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+}
+
+.project-card:hover::after {
+    opacity: 0.3;
 }
 
 .card-inner {
@@ -416,62 +476,262 @@ section {
     width: 100%;
     height: 100%;
     transform-style: preserve-3d;
-    transition: transform 0.8s;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .project-card:hover .card-inner {
     transform: rotateY(180deg);
 }
 
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.card-front {
+    background: var(--light-bg);
+}
+
+.card-front video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-back {
+    background: var(--light-bg);
+    transform: rotateY(180deg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.card-back h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: var(--dark-bg);
+}
+
+.card-back p {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    color: var(--dark-bg);
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+.project-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.project-links a {
+    padding: 0.8rem 1.8rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.demo-btn {
+    background: var(--dark-bg);
+    color: var(--primary-color);
+}
+
+.github-btn {
+    background: var(--primary-color);
+    color: var(--dark-bg);
+    border: 2px solid var(--dark-bg);
+}
+
+.project-links a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
 .carousel-button {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    background: rgba(36, 32, 56, 0.8);
-    color: #fff;
+    background: var(--dark-bg);
     border: none;
+    color: var(--primary-color);
+    font-size: 28px;
     cursor: pointer;
-    z-index: 10;
+    z-index: 100;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    opacity: 0.8;
 }
 
 .carousel-button:hover {
-    background: rgba(36, 32, 56, 1);
+    background: var(--primary-color);
+    color: var(--dark-bg);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    opacity: 1;
 }
 
 .carousel-button.prev {
-    left: -50px;
+    left: 0;
 }
 
 .carousel-button.next {
-    right: -50px;
+    right: 0;
 }
 
 .carousel-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 20px;
+    gap: 12px;
+    padding: 15px;
+    background: rgba(246, 246, 246, 0.8);
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+    z-index: 10;
 }
 
-.dot {
-    width: 10px;
-    height: 10px;
+.carousel-dot {
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    background: rgba(36, 32, 56, 0.3);
+    background: var(--dark-bg);
+    opacity: 0.3;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.dot.active {
-    background: rgba(36, 32, 56, 0.9);
+.carousel-dot:hover {
+    opacity: 0.5;
+    transform: scale(1.1);
+}
+
+.carousel-dot.active {
+    opacity: 1;
     transform: scale(1.2);
+    background: var(--dark-bg);
+}
+
+@media (max-width: 1400px) {
+    .project-card {
+        flex: 0 0 300px;
+    }
+    
+    .carousel-container {
+        padding: 0 70px;
+        height: 420px;
+    }
+    
+    .carousel {
+        height: 380px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .project-card {
+        flex: 0 0 280px;
+    }
+    
+    .carousel-container {
+        padding: 0 60px;
+        height: 400px;
+    }
+    
+    .carousel {
+        height: 360px;
+    }
+    
+    .carousel-button {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .project-card {
+        flex: 0 0 260px;
+    }
+    
+    .carousel-container {
+        padding: 0 50px;
+        height: 380px;
+    }
+    
+    .carousel {
+        height: 340px;
+        gap: 30px;
+    }
+    
+    .carousel-button {
+        width: 45px;
+        height: 45px;
+        font-size: 22px;
+    }
+    
+    .card-back h3 {
+        font-size: 1.6rem;
+    }
+    
+    .card-back p {
+        font-size: 0.9rem;
+    }
+    
+    .project-links a {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .project-card {
+        flex: 0 0 240px;
+    }
+    
+    .carousel-container {
+        padding: 0 40px;
+        height: 360px;
+    }
+    
+    .carousel {
+        height: 320px;
+        gap: 25px;
+    }
+    
+    .carousel-button {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+    
+    .carousel-dots {
+        gap: 10px;
+        padding: 12px;
+    }
+    
+    .carousel-dot {
+        width: 10px;
+        height: 10px;
+    }
 }
 
 /* Collaborate Section */
@@ -489,7 +749,7 @@ section {
 }
 
 .collaborate h1 {
-    font-family: 'Chau Philomene One', sans-serif;
+    font-family: var(--main-font);
     font-size: 65px;
     color: #242038;
     margin-bottom: 0.5rem;
@@ -498,7 +758,7 @@ section {
 }
 
 .collaborate h2 {
-    font-family: 'Chau Philomene One', sans-serif;
+    font-family: var(--main-font);
     font-size: 25px;
     color: var(--text-color);
     margin-bottom: 2rem;
@@ -519,7 +779,7 @@ section {
     align-items: center;
     gap: 1.2rem;
     padding: 0.8rem 2rem;
-    font-family: 'Chau Philomene One', sans-serif;
+    font-family: var(--main-font);
     font-size: 20px;
     color: var(--text-color);
     background: transparent;
@@ -568,7 +828,7 @@ section {
 
 .footer-links a {
     color: var(--text-color);
-    font-family: 'Chau Philomene One', sans-serif;
+    font-family: var(--main-font);
     font-size: 16px;
     transition: all 0.3s ease;
 }
@@ -579,7 +839,7 @@ section {
 }
 
 .footer-bottom {
-    font-family: 'Chau Philomene One', sans-serif;
+    font-family: var(--main-font);
     color: var(--text-color);
     font-size: 14px;
 }
@@ -651,11 +911,16 @@ section {
 
 @media (max-width: 768px) {
     .home-title {
-        font-size: 80px;
+        font-size: 90px;
+    }
+    
+    .portfolio-text {
+        font-size: 70px;
+        margin-top: -30px;
     }
     
     .home-content {
-        transform: translateY(-120px);
+        transform: translateY(-60px);
     }
 
     .about {
@@ -910,7 +1175,12 @@ section {
 /* Small devices */
 @media (max-width: 480px) {
     .home-title {
-        font-size: 36px;
+        font-size: 60px;
+    }
+    
+    .portfolio-text {
+        font-size: 50px;
+        margin-top: -20px;
     }
 
     .about-typing {
@@ -938,5 +1208,17 @@ section {
         width: 30px;
         height: 30px;
         font-size: 16px;
+    }
+}
+
+/* Mobile responsiveness for the gallery */
+@media (max-width: 768px) {
+    .scene {
+        height: calc(100vh - 250px);
+    }
+
+    .gallery {
+        width: 300px;
+        height: 350px;
     }
 }
