@@ -186,6 +186,11 @@ section {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .home-title {
@@ -193,25 +198,27 @@ section {
     font-weight: 200;   
     color: var(--text-color);
     text-align: center;
-    margin: 0 auto;
-    margin-top: 100px;
+    /* margin: 0 auto; */
+    margin-top: 90px;
     white-space: nowrap;
     overflow: hidden;
     border-right: 3px solid var(--text-color);
     width: 11ch;
     animation: typing 3s steps(11), blink 0.75s step-end infinite;
     font-family: var(--main-font);
+    line-height: 1;
 }
 
 .portfolio-text {
     font-family: 'Handelson-One', var(--main-font);
-    font-size: 185px;
+    font-size: 180px;
     color: var(--text-color);
     text-align: center;
-    margin-top: -30px;
+    margin-top: -10px;
     position: relative;
     z-index: 1;
     opacity: 1;
+    line-height: 1;
 }
 
 @keyframes typing {
@@ -416,39 +423,35 @@ section {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 80px;
+    padding: 0 60px;
     height: 450px;
     display: flex;
     align-items: center;
-    overflow: visible;
+    overflow: hidden;
 }
 
 .carousel {
-    position: absolute;
-    left: 80px;
-    right: 80px;
+    position: relative;
     display: flex;
-    gap: 40px;
-    transition: transform 0.8s ease;
+    gap: 30px;
+    transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
     height: 400px;
-    transform: translateX(0);
     will-change: transform;
+    margin: 0 20px;
 }
 
 .project-card {
-    flex: 0 0 320px;
+    flex: 0 0 280px;
     height: 100%;
     position: relative;
     border-radius: 20px;
     overflow: hidden;
     background: var(--light-bg);
-    box-shadow: 0 10px 30px rgba(36, 32, 56, 0.1);
     transition: all 0.8s ease;
     transform-style: preserve-3d;
-    perspective: 1000px;
+    perspective: 1500px;
     will-change: transform, opacity;
     cursor: pointer;
-    margin-right: 0;
 }
 
 .project-card:hover {
@@ -477,10 +480,11 @@ section {
     height: 100%;
     transform-style: preserve-3d;
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 15px 35px rgba(36, 32, 56, 0.1);
 }
 
 .project-card:hover .card-inner {
-    transform: rotateY(180deg);
+    transform: rotateY(180deg) scale(1.02);
 }
 
 .card-front,
@@ -491,6 +495,7 @@ section {
     backface-visibility: hidden;
     border-radius: 20px;
     overflow: hidden;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card-front {
@@ -504,72 +509,98 @@ section {
 }
 
 .card-back {
-    background: var(--light-bg);
+    background: rgba(246, 246, 246, 0.98);
     transform: rotateY(180deg);
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     text-align: center;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(230, 205, 175, 0.3);
+    box-shadow: 0 10px 30px rgba(36, 32, 56, 0.1);
 }
 
 .card-back h3 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    margin-bottom: 0.8rem;
     color: var(--dark-bg);
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 .card-back p {
     font-size: 0.95rem;
-    margin-bottom: 1.5rem;
     color: var(--dark-bg);
-    line-height: 1.5;
+    line-height: 1.6;
     opacity: 0.9;
+    max-width: 90%;
+    margin-bottom: auto;
 }
 
 .project-links {
     display: flex;
-    gap: 1rem;
+    gap: 0.8rem;
+    width: 100%;
+    justify-content: center;
+    padding: 0;
+    margin-top: 1rem;
 }
 
 .project-links a {
-    padding: 0.8rem 1.8rem;
+    padding: 0.45rem 1.2rem;
     border-radius: 25px;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 500;
     text-decoration: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(36, 32, 56, 0.08);
+    flex: 0 1 auto;
+    min-width: 100px;
+    text-align: center;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    border: 1px solid var(--dark-bg);
+    background: var(--primary-color);
+    color: var(--dark-bg);
 }
 
-.demo-btn {
+.demo-btn, .github-btn {
+    background: var(--primary-color);
+    color: var(--dark-bg);
+}
+
+.project-links a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(36, 32, 56, 0.12);
+    background: var(--dark-bg);
+    color: var(--primary-color);
+    filter: brightness(1.05);
+}
+
+.demo-btn:hover {
+    background: var(--primary-color);
+    color: var(--dark-bg);
+}
+
+.github-btn:hover {
     background: var(--dark-bg);
     color: var(--primary-color);
 }
 
-.github-btn {
-    background: var(--primary-color);
-    color: var(--dark-bg);
-    border: 2px solid var(--dark-bg);
-}
-
-.project-links a:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-
+/* Navigation Buttons */
 .carousel-button {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 60px;
-    height: 60px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     background: var(--dark-bg);
     border: none;
     color: var(--primary-color);
-    font-size: 28px;
+    font-size: 22px;
     cursor: pointer;
     z-index: 100;
     transition: all 0.3s ease;
@@ -589,13 +620,14 @@ section {
 }
 
 .carousel-button.prev {
-    left: 0;
+    left: 10px;
 }
 
 .carousel-button.next {
-    right: 0;
+    right: 10px;
 }
 
+/* Dots */
 .carousel-dots {
     position: absolute;
     bottom: 20px;
@@ -633,59 +665,39 @@ section {
 
 @media (max-width: 1400px) {
     .project-card {
-        flex: 0 0 300px;
+        flex: 0 0 280px;
     }
     
     .carousel-container {
-        padding: 0 70px;
+        padding: 0 50px;
         height: 420px;
-    }
-    
-    .carousel {
-        height: 380px;
     }
 }
 
 @media (max-width: 1024px) {
     .project-card {
-        flex: 0 0 280px;
+        flex: 0 0 260px;
     }
     
     .carousel-container {
-        padding: 0 60px;
+        padding: 0 45px;
         height: 400px;
-    }
-    
-    .carousel {
-        height: 360px;
-    }
-    
-    .carousel-button {
-        width: 50px;
-        height: 50px;
-        font-size: 24px;
     }
 }
 
 @media (max-width: 768px) {
     .project-card {
-        flex: 0 0 260px;
+        flex: 0 0 240px;
     }
     
     .carousel-container {
-        padding: 0 50px;
+        padding: 0 40px;
         height: 380px;
     }
     
     .carousel {
-        height: 340px;
-        gap: 30px;
-    }
-    
-    .carousel-button {
-        width: 45px;
-        height: 45px;
-        font-size: 22px;
+        margin: 0 15px;
+        gap: 25px;
     }
     
     .card-back h3 {
@@ -699,6 +711,23 @@ section {
     .project-links a {
         padding: 0.7rem 1.5rem;
         font-size: 0.95rem;
+    }
+
+    .home-title {
+        font-size: 90px;
+        width: 100%;
+        animation: none;
+        border-right: none;
+        white-space: normal;
+    }
+    
+    .portfolio-text {
+        font-size: 70px;
+        margin-top: -10px;
+    }
+    
+    .home-content {
+        transform: translateY(-60px);
     }
 }
 
@@ -722,15 +751,14 @@ section {
         height: 40px;
         font-size: 20px;
     }
-    
-    .carousel-dots {
-        gap: 10px;
-        padding: 12px;
+
+    .home-title {
+        font-size: 60px;
     }
     
-    .carousel-dot {
-        width: 10px;
-        height: 10px;
+    .portfolio-text {
+        font-size: 50px;
+        margin-top: -8px;
     }
 }
 
@@ -867,18 +895,6 @@ section {
     to {
         opacity: 1;
         transform: translateY(0);
-    }
-}
-
-@keyframes float {
-    0% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-    100% {
-        transform: translateY(0px);
     }
 }
 

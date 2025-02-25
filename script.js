@@ -26,32 +26,6 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Mobile menu functionality
-const menuBtn = document.querySelector('.menu-btn');
-const navbar = document.querySelector('.navbar');
-
-// Toggle menu when clicking the button
-menuBtn.addEventListener('click', () => {
-    navbar.classList.toggle('active');
-});
-
-// Close menu when clicking a link
-document.querySelectorAll('.navbar a').forEach(link => {
-    link.addEventListener('click', () => {
-        navbar.classList.remove('active');
-    });
-});
-
-// Close menu when clicking outside
-document.addEventListener('click', (e) => {
-    // Only close if menu is active and click is outside navbar
-    if (navbar.classList.contains('active') && 
-        !navbar.contains(e.target) && 
-        !menuBtn.contains(e.target)) {
-        navbar.classList.remove('active');
-    }
-});
-
 // About section animations
 const aboutSection = document.querySelector('#about');
 const aboutElements = {
@@ -83,65 +57,70 @@ if (aboutSection) {
 }
 
 // Projects Carousel
-document.addEventListener('DOMContentLoaded', () => {
+function initializeCarousel() {
+    console.log('Initializing carousel...');
+    
+    // Get carousel elements
     const carousel = document.querySelector('.carousel');
     const cards = document.querySelectorAll('.project-card');
     const prevBtn = document.querySelector('.carousel-button.prev');
     const nextBtn = document.querySelector('.carousel-button.next');
-    const dotsContainer = document.querySelector('.carousel-dots');
-    
+
+    // Check if elements exist
+    if (!carousel || !prevBtn || !nextBtn) {
+        console.error('Missing carousel elements');
+        return;
+    }
+
     let currentIndex = 0;
     const totalCards = cards.length;
-    
-    // Initialize dots
-    dotsContainer.innerHTML = '';
-    cards.forEach((_, index) => {
-        const dot = document.createElement('div');
-        dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
-        dot.addEventListener('click', () => goToSlide(index));
-        dotsContainer.appendChild(dot);
-    });
+    let autoPlayInterval;
 
     function updateCarousel(smooth = true) {
         const cardWidth = cards[0].offsetWidth;
-        const gap = 40;
-        const offset = -(currentIndex * (cardWidth + gap));
+        const gap = 30;
+        const containerWidth = carousel.parentElement.offsetWidth;
+        const visibleWidth = containerWidth - 200;
         
-        if (smooth) {
-            carousel.style.transition = 'transform 0.8s ease';
-        } else {
-            carousel.style.transition = 'none';
+        // Limit the offset to show 2 cards
+        let baseOffset = Math.min(100 - (currentIndex * (cardWidth + gap)), 100);
+        
+        // Prevent the carousel from moving too far left
+        if (currentIndex >= totalCards - 2) {
+            baseOffset = -((totalCards - 3) * (cardWidth + gap));
         }
         
-        carousel.style.transform = `translateX(${offset}px)`;
+        carousel.style.transition = smooth ? 'transform 1.5s cubic-bezier(0.4, 0, 0.2, 1)' : 'none';
+        carousel.style.transform = `translateX(${baseOffset}px)`;
         
-        // Update dots
-        document.querySelectorAll('.carousel-dot').forEach((dot, idx) => {
-            dot.classList.toggle('active', idx === currentIndex);
-        });
-        
-        // Update card states
+        // Update card states with smoother transitions
         cards.forEach((card, idx) => {
             const distance = Math.abs(idx - currentIndex);
-            if (smooth) {
-                card.style.transition = 'all 0.8s ease';
-            } else {
-                card.style.transition = 'none';
+            card.style.transition = smooth ? 'all 1.5s cubic-bezier(0.4, 0, 0.2, 1)' : 'none';
+            
+            card.classList.remove('active', 'semi-active');
+            
+            if (distance === 0) {
+                card.classList.add('active');
+            } else if (distance === 1 && idx > currentIndex) {
+                card.classList.add('semi-active');
             }
-            card.style.opacity = distance === 0 ? '1' : '0.6';
-            card.style.transform = `scale(${distance === 0 ? 1 : 0.85})`;
         });
 
-        // Log for debugging
-        console.log('Updating carousel:', { currentIndex, offset, cardWidth });
+        console.log(`Current Index: ${currentIndex}, Offset: ${baseOffset}px`);
     }
 
-    function goToSlide(index) {
+    function goToSlide(index, smooth = true) {
         currentIndex = index;
-        if (currentIndex < 0) currentIndex = totalCards - 1;
-        if (currentIndex >= totalCards) currentIndex = 0;
-        updateCarousel(true);
-        console.log('Going to slide:', currentIndex); // Debug log
+        
+        // Ensure smooth wrapping with limited range
+        if (currentIndex < 0) {
+            currentIndex = totalCards - 2;
+        } else if (currentIndex >= totalCards - 1) {
+            currentIndex = 0;
+        }
+        
+        updateCarousel(smooth);
     }
 
     function nextSlide() {
@@ -152,84 +131,46 @@ document.addEventListener('DOMContentLoaded', () => {
         goToSlide(currentIndex - 1);
     }
 
-    // Auto-advance carousel
-    let autoplayInterval = setInterval(nextSlide, 5000);
+    // Auto-play functionality with slower transitions
+    function startAutoPlay() {
+        stopAutoPlay();
+        autoPlayInterval = setInterval(nextSlide, 6000); // 6 seconds interval
+    }
 
-    function resetAutoplay() {
-        clearInterval(autoplayInterval);
-        autoplayInterval = setInterval(nextSlide, 5000);
+    function stopAutoPlay() {
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+        }
     }
 
     // Event Listeners
     prevBtn.addEventListener('click', (e) => {
         e.preventDefault();
+        stopAutoPlay();
         prevSlide();
-        resetAutoplay();
-        console.log('Prev button clicked'); // Debug log
+        startAutoPlay();
     });
 
     nextBtn.addEventListener('click', (e) => {
         e.preventDefault();
+        stopAutoPlay();
         nextSlide();
-        resetAutoplay();
-        console.log('Next button clicked'); // Debug log
+        startAutoPlay();
     });
 
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft') {
-            prevSlide();
-            resetAutoplay();
-        } else if (e.key === 'ArrowRight') {
-            nextSlide();
-            resetAutoplay();
-        }
-    });
+    // Pause auto-play on hover
+    carousel.addEventListener('mouseenter', stopAutoPlay);
+    carousel.addEventListener('mouseleave', startAutoPlay);
 
-    // Touch events
-    let touchStartX = 0;
-    carousel.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-        clearInterval(autoplayInterval);
-    });
+    // Initialize carousel starting from the left
+    goToSlide(0, false);
+    startAutoPlay();
+}
 
-    carousel.addEventListener('touchend', (e) => {
-        const touchEndX = e.changedTouches[0].clientX;
-        const diff = touchStartX - touchEndX;
-
-        if (Math.abs(diff) > 50) {
-            if (diff > 0) {
-                nextSlide();
-            } else {
-                prevSlide();
-            }
-        }
-        resetAutoplay();
-    });
-
-    // Pause on hover
-    const carouselContainer = document.querySelector('.carousel-container');
-    carouselContainer.addEventListener('mouseenter', () => {
-        clearInterval(autoplayInterval);
-    });
-
-    carouselContainer.addEventListener('mouseleave', () => {
-        resetAutoplay();
-    });
-
-    // Initialize carousel
-    updateCarousel(false);
-    console.log('Carousel initialized with', totalCards, 'cards'); // Debug log
-
-    // Handle window resize
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            updateCarousel(false);
-            console.log('Carousel updated after resize'); // Debug log
-        }, 100);
-    });
+// Initialize carousel when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, starting initialization...');
+    initializeCarousel();
 });
 
 // Error handling for videos
